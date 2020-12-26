@@ -23,7 +23,7 @@ resource "aws_ecs_cluster" "ecs_cluster" {
 
 module "sample_app" {
 
-  source = ""
+  source = "github.com/madagra/terraform-aws-single-task-service"
 
   task_name       = "sample_app"
   vpc_id          = module.vpc.vpc_id
