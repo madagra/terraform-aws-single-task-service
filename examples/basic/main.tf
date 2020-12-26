@@ -1,17 +1,5 @@
 # ========= variables ==========
 
-variable "ecr_repo" {
-  description = "The root URL of the ECR repository of the application"
-  type        = string
-  default     = "206396035828.dkr.ecr.eu-west-3.amazonaws.com"
-}
-
-variable "ecr_image" {
-  description = "The image name in the ECR repository to use for starting the service"
-  type        = string
-  default     = "206396035828.dkr.ecr.eu-west-3.amazonaws.com"
-}
-
 variable "ecs_role" {
   description = "The name of the role to be assumed by ECS tasks"
   type        = string
@@ -20,7 +8,7 @@ variable "ecs_role" {
 
 variable "app_port" {
   description = "The port where it runs the qubec API server"
-  default     = 8000
+  default     = 27017
 }
 
 variable "profile" {
@@ -71,12 +59,6 @@ module "vpc" {
   }
 }
 
-# resource "aws_service_discovery_private_dns_namespace" "example_namespace" {
-#   name        = "sample_app"
-#   description = "Service discovery test"
-#   vpc         = module.vpc.vpc_id
-# }
-
 data "aws_iam_policy_document" "ecs_task_execution_role" {
   version = "2012-10-17"
   statement {
@@ -101,16 +83,6 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_policy" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
-# resource "aws_iam_role_policy_attachment" "ecs_ec2_container_policy" {
-#   role       = aws_iam_role.ecs_execution.name
-#   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
-# }
-
-# resource "aws_iam_instance_profile" "ecs_instance" {
-#   name = var.ecs_role
-#   role = aws_iam_role.ecs_execution.name
-# }
-
 resource "aws_ecs_cluster" "example_cluster" {
   name = "basic-example-cluster"
 }
@@ -123,7 +95,7 @@ module "sample_app" {
 
   ecs_cluster     = aws_ecs_cluster.example_cluster.id
   task_name       = "sample_app"
-  container_image = "${var.ecr_repo}/${var.ecr_image}"
+  container_image = "mongo:latest"
   task_exec_role  = aws_iam_role.ecs_execution.arn
 
   vpc_id          = module.vpc.vpc_id
@@ -131,7 +103,6 @@ module "sample_app" {
   security_groups = [module.vpc.default_security_group_id]
 
   task_launch_type  = "FARGATE"
-  task_network_mode = "awsvpc"
   open_ports        = [var.app_port]
   environment = [
     {
