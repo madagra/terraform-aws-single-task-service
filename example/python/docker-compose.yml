@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  backend.sample_app:
+    build: ./backend
+    image: backend.sample_app:latest
+    container_name: backend.sample_app
+    ports:
+      - "8000:8000"
+  frontend.sample_app:
+    build: ./frontend
+    image: frontend.sample_app:latest
+    container_name: frontend.sample_app
+    ports:
+      - "8001:8001"      

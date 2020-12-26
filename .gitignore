@@ -1,0 +1,52 @@
+# Default ignored files
+/.idea/
+/__pycache__/
+.vscode/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Distribution / packaging
+.Python
+*.egg-info/
+.installed.cfg
+*.egg
+build/
+dist/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Local .terraform directories
+**/.terraform/*
+**.tfvars
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# Crash log files
+crash.log
+
+# Ignore override files as they are usually used to override resources locally and so
+# are not checked in
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+POST.md
