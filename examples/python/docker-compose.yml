@@ -6,10 +6,15 @@ services:
     image: backend.sample_app:latest
     container_name: backend.sample_app
     ports:
-      - "8000:8000"
+      - "8001:8001"
   frontend.sample_app:
     build: ./frontend
     image: frontend.sample_app:latest
     container_name: frontend.sample_app
     ports:
-      - "8001:8001"      
+      - "8000:8000"
+  queue.sample_app:
+    image: rabbitmq:3-management
+    container_name: queue.sample_app
+    ports:
+      - "5672:5672"

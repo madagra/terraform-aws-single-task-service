@@ -7,7 +7,6 @@ verify_ssl = true
 
 [packages]
 fastapi = {extras = ["all"], version = "*"}
-elasticsearch-dsl = "*"
 pika = "*"
 
 [requires]

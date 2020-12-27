@@ -2,6 +2,8 @@
 
 resource "aws_security_group" "security_group" {
 
+  description = "The security group of the ECS task allowing traffic only on the container ports"
+
   vpc_id = var.vpc_id
 
   dynamic "ingress" {
