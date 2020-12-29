@@ -13,21 +13,16 @@ variable "namespace" {
 
 # ========= resources ==========
 
-# data "aws_route53_zone" "public" {
-#   name         = var.domain_name
-#   private_zone = false
-# }
-
-# resource "aws_route53_record" "dns_record" {
-#   zone_id = data.aws_route53_zone.public.zone_id
-#   name    = data.aws_route53_zone.public.name
-#   type    = "A"
-#   alias {
-#     name                   = module.alb.this_lb_dns_name
-#     zone_id                = module.alb.this_lb_zone_id
-#     evaluate_target_health = false
-#   }
-# }
+resource "aws_route53_record" "dns_record" {
+  zone_id = coalescelist(data.aws_route53_zone.this.*.zone_id, aws_route53_zone.this.*.zone_id)[0]
+  name    = coalescelist(data.aws_route53_zone.this.*.name, aws_route53_zone.this.*.name)[0]
+  type    = "A"
+  alias {
+    name                   = module.alb.this_lb_dns_name
+    zone_id                = module.alb.this_lb_zone_id
+    evaluate_target_health = false
+  }
+}
 
 resource "aws_security_group" "alb_sg" {
 

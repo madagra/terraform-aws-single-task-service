@@ -25,6 +25,12 @@ variable "vpc_subnets" {
   type        = list(string)
 }
 
+variable "vpc_cidr" {
+  description = "The trusted VPC CIDR to assign to the task security group ingress"
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
+}
+
 variable "task_exec_role" {
   description = "The IAM role which is assumed by the ECS tasks"
   type        = string

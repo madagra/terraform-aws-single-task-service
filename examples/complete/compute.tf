@@ -13,14 +13,15 @@ module "ecs_cluster" {
   cluster_name = var.cluster_name
   spot         = true
   instance_types = {
-    "t3a.small" = 1
+    "t3.small" = 1
   }
   target_capacity = 100
 
-  trusted_cidr_blocks = module.vpc.public_subnets_cidr_blocks
-  subnets_ids         = module.vpc.public_subnets
+  trusted_cidr_blocks = module.vpc.private_subnets_cidr_blocks
+  subnets_ids         = module.vpc.private_subnets
 
   tags = {
-    Name = "complete-example-cluster"
-  Terraform = "true" }
+    Name      = "complete-example-cluster"
+    Terraform = "true"
+  }
 }

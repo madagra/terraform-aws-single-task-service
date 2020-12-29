@@ -10,13 +10,13 @@ variable "use_existing_route53_zone" {
   default     = true
 }
 
-# ========= resources ==========
-
 data "aws_route53_zone" "this" {
   count        = var.use_existing_route53_zone ? 1 : 0
   name         = var.domain_name
   private_zone = false
 }
+
+# ========= resources ==========
 
 resource "aws_route53_zone" "this" {
   count = ! var.use_existing_route53_zone ? 1 : 0
@@ -36,6 +36,7 @@ module "acm" {
     Name      = "complete-example-cert"
     Terraform = "true"
   }
+
 }
 
 module "vpc" {
@@ -56,7 +57,7 @@ module "vpc" {
   enable_dns_support   = true
 
   tags = {
-    Name      = "basic-example-vpc"
+    Name      = "complete-example-vpc"
     Terraform = "true"
   }
 }

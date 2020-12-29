@@ -12,7 +12,7 @@ resource "aws_security_group" "security_group" {
       protocol    = "tcp"
       from_port   = ingress.value
       to_port     = ingress.value
-      cidr_blocks = ["0.0.0.0/0"]
+      cidr_blocks = var.vpc_cidr
     }
   }
 
@@ -117,7 +117,7 @@ resource "aws_ecs_service" "service" {
   dynamic "service_registries" {
     for_each = var.has_discovery == false ? [] : list(var.has_discovery)
     content {
-      registry_arn   = aws_service_discovery_service.discovery_name.arn
+      registry_arn   = aws_service_discovery_service.discovery_name[0].arn
       container_name = var.task_name
     }
   }
