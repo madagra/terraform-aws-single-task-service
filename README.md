@@ -54,46 +54,54 @@ provisioned with the module.
 * `example/python`: A sample Python application which can be used for testing
 the module with multiple communicating services.
 
+## Requirements
+
+| Name | Version |
+|------|---------|
+| terraform | >= 0.13.5 |
+| aws | >= 3.0.0 |
+
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws  | n/a |
+| aws | >= 3.0.0 |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:-----:|
-| task_name | The name of the service which is used also in service discovery name and task definition family | `string` | n/a | yes |
-| container_image | The Docker image to run within the ECS task | `string` | n/a | yes |
-| ecs_cluster | The cluster ID where the ECS service will run | `string` | n/a | yes |
-| vpc_id | The ID of the VPC where the ECS cluster is running | `string` | n/a | yes |
-| vpc_subnets | The VPC subnets where the ECS task will run | `list(string)` | n/a | yes |
-| task_exec_role | The IAM role which is assumed by the ECS tasks | `string` | n/a | yes |
-| task_network_mode | The network mode for the ECS task | `string` | `awsvpc` | no |
-| task_launch_type | The launch type for the ECS task. Choose between EC2 and FARGATE | `string` | `EC2` | no |
-| task_cpu | The number of cpu units reserved for the container | `number` | `512` | no |
-| task_memory | The hard limit (in MiB) of memory to present to the container | `number` | `512` | no |
-| desired_count | The desired number of tasks to run | `number` | `1` | no |
-| deployment_minimum_healthy_percent | The minimum percentage of running tasks to consider the serviec healthy | `number` | `50` | no |
-| deployment_maximum_percent | The maximum number of tasks which can run during redeployment | `number` | `100` | no |
-| environment | Environmental variables to pass to the container | `list(string)` | `[]` | no |
-| security_groups | Additional security groups to assign to the ECS service | `list(string)` | `[]` | no |
-| has_alb | Flag to determine if the service is associated with an ALB | `bool` | `false` | no |
-| alb_port | The ALB port to be exposed for the service | `number` | 0 | no |
-| alb_target_group | The ARN of the load balancer target group for the service | `string` | `null` | no |
-| has_discovery | Flag to determine if the create service is associated with an autoscaling group of EC2 instances | `bool` | `false` | no |
-| dns_namespace | The name of the DNS namespace to use as service discovery zone | `string` | `null` | no |
-| has_asg | Flag to determine if the create service is associated with an autoscaling group of EC2 instances | `bool` | `false` | no |
-| capacity_provider | The capacity provider name for the autoscaling group | `string` | `null` | no |
-| has_logs | Flag to turn container log forwarding to CloudWatch (required an execution role which allows for CloudWatch logs group creation) | `bool` | `false` | no |
-| logs_region | The region where the CloudWatch logs group for the service is created | `string` | `null` | no |
-
+|------|-------------|------|---------|:--------:|
+| alb\_port | If load balanced service this is the application port for the target group | `number` | `0` | no |
+| alb\_target\_group | If the service is associated with an application load balancer this is the ALB target group | `string` | `null` | no |
+| capacity\_provider | The capacity provider name for the autoscaling group | `string` | `null` | no |
+| container\_image | The Docker image to run with the task | `string` | n/a | yes |
+| deployment\_maximum\_percent | The maximum number of tasks which can run during redeployment of the service | `number` | `100` | no |
+| deployment\_minimum\_healthy\_percent | The minimum percentage of running tasks to consider the service healthy | `number` | `50` | no |
+| desired\_count | The desired number of the ECS task to run | `number` | `1` | no |
+| dns\_namespace | The Route53 DNS namespace where the ECS task is registered | `string` | `null` | no |
+| ecs\_cluster | The ECS cluster ID where the service should run | `string` | n/a | yes |
+| environment | The container environmental variables | `list(map(string))` | `[]` | no |
+| has\_alb | Whether the service should be registered to an application load balancer | `bool` | `false` | no |
+| has\_asg | Whether the service is associated with an autoscaling group of EC2 instances | `bool` | `false` | no |
+| has\_discovery | Flag to switch on service discovery. If true, a valid DNS namespace must be provided | `bool` | `false` | no |
+| has\_logs | Whether to forward logging to CloudWatch | `bool` | `false` | no |
+| logs\_region | The region where the CloudWatch logs group is created | `string` | `null` | no |
+| open\_ports | The ports which should be opened in the container and the security group to allow communication among services | `list(string)` | `[]` | no |
+| security\_groups | Additional security groups to assign to the ECS service | `list(string)` | `[]` | no |
+| task\_cpu | The CPU percentage allocated for the ECS task in vCPU units | `number` | `512` | no |
+| task\_exec\_role | The IAM role which is assumed by the ECS tasks | `string` | n/a | yes |
+| task\_launch\_type | The launch type for the ECS task. Choose between EC2 and FARGATE | `string` | `"EC2"` | no |
+| task\_memory | The memory allocated for the ECS task in Mb | `number` | `512` | no |
+| task\_name | The task name which gives the name to the ECS task, container and service discovery name | `string` | n/a | yes |
+| task\_network\_mode | The network mode for the ECS task | `string` | `"awsvpc"` | no |
+| vpc\_cidr | The trusted VPC CIDR to assign to the task security group ingress block | `list(string)` | <pre>[<br>  "0.0.0.0/0"<br>]</pre> | no |
+| vpc\_id | The ID of the VPC where the ECS cluster is running | `string` | n/a | yes |
+| vpc\_subnets | The VPC subnets where the application should run | `list(string)` | n/a | yes |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| service_arn | The full Amazon Resource Name (ARN) of the created service |
-| task_family | The family of your task definition, used as the definition name |
-| task_revision | The revision of the task in a particular family |
+| service\_arn | The ARN of the ECS service created |
+| task\_family | The family of your task definition, used as the definition name |
+| task\_revision | The revision of the task in a particular family |

@@ -1,7 +1,7 @@
 # ========= input variables ==========
 
 variable "task_name" {
-  description = "The task name which gives the name to the task, container and service discovery"
+  description = "The task name which gives the name to the ECS task, container and service discovery name"
   type        = string
 }
 
@@ -26,7 +26,7 @@ variable "vpc_subnets" {
 }
 
 variable "vpc_cidr" {
-  description = "The trusted VPC CIDR to assign to the task security group ingress"
+  description = "The trusted VPC CIDR to assign to the task security group ingress block"
   type        = list(string)
   default     = ["0.0.0.0/0"]
 }
@@ -55,7 +55,7 @@ variable "has_discovery" {
 }
 
 variable "dns_namespace" {
-  description = "The Route53 DNS namespace to be used by the service discovery mechanism"
+  description = "The Route53 DNS namespace where the ECS task is registered"
   type        = string
   default     = null
 }
@@ -67,7 +67,7 @@ variable "open_ports" {
 }
 
 variable "has_alb" {
-  description = "If the load balancer should point to the service or not"
+  description = "Whether the service should be registered to an application load balancer"
   type        = bool
   default     = false
 }
@@ -79,13 +79,13 @@ variable "alb_port" {
 }
 
 variable "alb_target_group" {
-  description = "If load balanced service this is the target group"
+  description = "If the service is associated with an application load balancer this is the ALB target group"
   type        = string
   default     = null
 }
 
 variable "has_asg" {
-  description = "Flag to determine if the create service is associated with an autoscaling group of EC2 instances"
+  description = "Whether the service is associated with an autoscaling group of EC2 instances"
   type        = bool
   default     = false
 }
@@ -97,25 +97,25 @@ variable "capacity_provider" {
 }
 
 variable "has_logs" {
-  description = "Whether to forward logging to CloudWatch or not"
+  description = "Whether to forward logging to CloudWatch"
   type        = bool
   default     = false
 }
 
 variable "logs_region" {
-  description = "The region where to create the CloudWatch logs group"
+  description = "The region where the CloudWatch logs group is created"
   type        = string
   default     = null
 }
 
 variable "task_cpu" {
-  description = "The CPU percentage allocated for the task"
+  description = "The CPU percentage allocated for the ECS task in vCPU units"
   type        = number
   default     = 512
 }
 
 variable "task_memory" {
-  description = "The memory allocated for the task"
+  description = "The memory allocated for the ECS task in Mb"
   type        = number
   default     = 512
 }
@@ -127,21 +127,25 @@ variable "environment" {
 }
 
 variable "security_groups" {
-  type    = list(string)
-  default = []
+  description = "Additional security groups to assign to the ECS service"
+  type        = list(string)
+  default     = []
 }
 
 variable "desired_count" {
-  type    = number
-  default = 1
+  description = "The desired number of the ECS task to run"
+  type        = number
+  default     = 1
 }
 
 variable "deployment_maximum_percent" {
-  type    = number
-  default = 100
+  description = "The maximum number of tasks which can run during redeployment of the service"
+  type        = number
+  default     = 100
 }
 
 variable "deployment_minimum_healthy_percent" {
-  type    = number
-  default = 50
+  description = "The minimum percentage of running tasks to consider the service healthy"
+  type        = number
+  default     = 50
 }
