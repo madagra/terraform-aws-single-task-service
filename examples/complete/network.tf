@@ -4,40 +4,7 @@ data "aws_availability_zones" "available" {
   state = "available"
 }
 
-variable "use_existing_route53_zone" {
-  description = "Whether a DNS for the chosen domain is existing or not"
-  type        = bool
-  default     = true
-}
-
-data "aws_route53_zone" "this" {
-  count        = var.use_existing_route53_zone ? 1 : 0
-  name         = var.domain_name
-  private_zone = false
-}
-
 # ========= resources ==========
-
-resource "aws_route53_zone" "this" {
-  count = ! var.use_existing_route53_zone ? 1 : 0
-  name  = var.domain_name
-}
-
-module "acm" {
-
-  source = "terraform-aws-modules/acm/aws"
-
-  domain_name = var.domain_name
-  zone_id     = coalescelist(data.aws_route53_zone.this.*.zone_id, aws_route53_zone.this.*.zone_id)[0]
-
-  wait_for_validation = true
-
-  tags = {
-    Name      = "complete-example-cert"
-    Terraform = "true"
-  }
-
-}
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
