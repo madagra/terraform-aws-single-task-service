@@ -139,6 +139,11 @@ resource "aws_ecs_service" "service" {
     }
   }
 
+  ordered_placement_strategy {
+    type  = "binpack"
+    field = "cpu"
+  }
+
   tags = {
     Name      = "${var.task_name}-service"
     Terraform = "true"
